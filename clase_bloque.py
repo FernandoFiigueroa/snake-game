@@ -12,7 +12,7 @@ class Bloque:
     
     def posicion_random(self):
         """ Creo una lista de tuplas de la posicion de los bloques"""
-        self.bloque_posicion = [(random.randrange(40,ALTO_VENTANA,20), (random.randrange(40,ALTO_VENTANA,20))) for i in range(15)]
+        self.bloque_posicion = [(random.randrange(40,ALTO_VENTANA,20), (random.randrange(40,ALTO_VENTANA,20))) for i in range(10)]
 
     
     def dibujar_bloque(self,ventana):

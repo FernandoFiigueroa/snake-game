@@ -5,11 +5,10 @@ from funciones import main
 from funciones import draw_ingreso_nombre
 from jugar import ButtonJugar
 from clase_nombre import Datos
-from personaje import Snake
+
 
 
 datos = Datos()
-snake = Snake()
 jugar = ButtonJugar()
 
 pygame.init()
@@ -20,7 +19,7 @@ pygame.display.set_caption("Snake Game")#Titulo del juego
 img_fondo = pygame.image.load("snake_game/imagenes/background.jpg")
 img_fondo = pygame.transform.scale(img_fondo,(ANCHO_VENTANA, ALTO_VENTANA))
 
-img_menu = pygame.image.load("snake_game/imagenes/p.jpg")
+img_menu = pygame.image.load("snake_game/imagenes/background_inicio.jpg")
 img_menu = pygame.transform.scale(img_menu,(ALTO_MENU,ANCHO_VENTANA ))
 
 
@@ -49,7 +48,9 @@ while correr:
                                         JUGANDO = 0
 
     if JUGANDO == 1:
-        main(ventana,clock,img_fondo,nombre_ingresado)         
-
+        """llamo a la funcion main"""
+        
+        JUGANDO =  main(ventana,clock,img_fondo)             
+                               
 pygame.display.flip()
 

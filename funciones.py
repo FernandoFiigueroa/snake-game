@@ -6,7 +6,6 @@ from clase_comida import Comida
 from clase_bloque import Bloque
 from dibujar_score import imprimir_score
 from clase_nombre import Datos
-from crear_base_de_datos import insertar_datos_en_BD
 import sys
 
 
@@ -15,19 +14,25 @@ snake = Snake()
 food = Comida()
 bloque = Bloque()
 
+
+img_pausa = pygame.image.load("snake_game/imagenes/pausa.png")
+img_pausa = pygame.transform.scale(img_pausa,(ALTO_VENTANA,ANCHO_VENTANA )) 
    
-def main(ventana,clock,img_galaxia,nombre_ingresado):
+
+def main(ventana,clock,img_galaxia):
         
         """Funcion principal de mi juego, llama a todas las funcion que generan un evento en mi juego"""
+        
         correr_juego = True
 
         tiempo = 0
         segundos = 0
         while correr_juego :
+            
+            llamar_menu_pausa(ventana)
+                          
             clock.tick(FPS) #le da un tiempo al juego para que no valla tan rapido 
             
-           
-
             ventana.blit(img_galaxia,img_galaxia.get_rect()) #Pego el fondo a la ventana
 
             while True:
@@ -36,41 +41,81 @@ def main(ventana,clock,img_galaxia,nombre_ingresado):
                     food.posicion_random()
                 break
             
-            
             tiempo += 1
-            if tiempo == 20:
+            if tiempo == 15:
                 segundos += 1
                 tiempo = 0
-                
                 
             font_score = pygame.font.SysFont("Helvetica", 20)
             score = font_score.render("TIEMPO: {0}".format(segundos),True,WHITE)
             ventana.blit(score,(0,0)) 
-
-            imprimir_funciones(ventana,nombre_ingresado) #imprimo toda mi funciones de eventos
+            
+            imprimir_funciones(ventana) 
+            
+        
+        
             pygame.display.flip() 
 
 
 
-
-def imprimir_funciones(ventana,nombre_ingresado):
+def imprimir_funciones(ventana):
             
             """utilizando OBJETOS llamo a la clase para verificar si la nave se movio. 
             Dibujo la comida del snake,chequeo si mi snake choco con un muro,etc"""
             
             snake.mover_snake(ventana)
+            
             chequear_bloque(snake,bloque)
-            chequear_comida(snake,food,ventana,nombre_ingresado)
+            
             food.dibujar_comida(ventana)  
+            
             imprimir_score(ventana,snake,bloque)
             
+            chequear_comida(snake,food,ventana)
+           
+
+
+def juego_pausa(ventana):
+        
+        """Si el usuario llama a la funcion se mostrara una pantalla negra con 2 opciones, la primera es: si sepresiona la tecla Y el juego continua,
+        la segunda es:si el ususario presiona la tecla Y el juego se cierra automaticamente """
+        
+        pausada = True
+        while pausada:
+            lista_eventos = pygame.event.get()
+            for evento in lista_eventos:
+                    if evento.type == pygame.QUIT:
+                                pygame.quit()
+                        
+                    if evento.type == pygame.KEYDOWN:
+                            if evento.key == pygame.K_x:
+                                pausada  = False
+                            if evento.key == pygame.K_y:
+                                pygame.quit
+                                sys.exit()
+        
+            ventana.blit(img_pausa, (0,0))
+            pygame.display.flip()      
+        
+        
+def llamar_menu_pausa(ventana):
+    
+    """si el usuario oprime la letra q llamo a la funcion juego_pausa()"""
+    
+    lista_eventos = pygame.event.get()
+    for evento in lista_eventos:
+            if evento.type == pygame.QUIT:
+                    pygame.quit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_q:
+                    juego_pausa(ventana)        
+                  
             
-            
-def chequear_comida(serpiente,comida,ventana,nombre_ingresado):
+def chequear_comida(serpiente,comida,ventana):
     
     """La funcion verifica si la posicion de la cabeza de mi snake es la misma que la de la manzana. En pocas palabras verifica si la snake se comio la manzana.
         Si la condicion se cumple se vuelve a generar una posicion random de la manzana, tambien aumentamos el score"""
-    
+        
     if tuple(serpiente.obtener_cabeza()) == comida.posicion_comida: #como el metodo obtener_cabeza() me devuelve una lista lo casteo a una tupla para que se puedan comparars(#si le pongo un (in) lo pasa por arriba)
         
         serpiente.crecer_serpiente(comida.posicion_comida,ventana)
@@ -81,9 +126,7 @@ def chequear_comida(serpiente,comida,ventana,nombre_ingresado):
         serpiente.longitud+=1
         if serpiente.longitud > serpiente.best_score:
             serpiente.best_score += 1
-            """ le paso a mi base de datos mi score"""
-            insertar_datos_en_BD(serpiente.score,nombre_ingresado)
-  
+            """ le paso a mi base de datos mi score""" 
   
         
 def chequear_bloque(serpiente,bloque):
@@ -96,9 +139,8 @@ def chequear_bloque(serpiente,bloque):
             serpiente.reset()
 
 
-
-
 def draw_ingreso_nombre(ventana,img_fondo,nombre_ingresado):
+    
         """creo un rectangulo en el cual dentro el usuario puede escribir su nombre antes de comenzar el juego"""
         
         font_input = pygame.font.SysFont("arial",30)
@@ -113,5 +155,3 @@ def draw_ingreso_nombre(ventana,img_fondo,nombre_ingresado):
         
         ventana.blit(font_rect,(ingreso_rect.x +5,ingreso_rect.y +5)) #imprimo lo que el usuario escribe dentro del cuadrado
         
-      
-

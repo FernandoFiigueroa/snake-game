@@ -4,6 +4,7 @@ from variables import *
 import random
 import tkinter as tk
 from tkinter import messagebox as mbox
+import sys
 
 
 class Snake:
@@ -19,7 +20,6 @@ class Snake:
                                         "down": ["up"]} #Verificio hacia donde no quiero que valla depediendo la direccion
         self.score = 0
         self.best_score = 1
-        
         
     def mover_snake(self,ventana):
             
@@ -51,10 +51,10 @@ class Snake:
                         if self.check_valid_movement(pygame.key.name(evento.key)):
                             continue
                         self.movimiento_actual = "down"
-                    
+                
             self.snake_movements(ventana)              
-
-        
+            
+            
     def snake_movements(self,ventana):
         
         """la funcion hace que la serpiente se mueva constantemente para la direccion en la que el usuario presiono la tecla.
@@ -67,7 +67,7 @@ class Snake:
             
         if self.movimiento_actual == "right":
             mover = self.cuerpo[0][0] + self.velocidad #Muevo la poscion X
-            eje_x = self.check_bounds(mover, "masx_limite")
+            eje_x = self.check_bounds(mover, "max_limite")
             self.update_snake(mover,"X",ventana) #le paso X porque me muevo hacia la izquierda
             
         if self.movimiento_actual == "up":
@@ -105,7 +105,7 @@ class Snake:
             
 
             pygame.draw.rect(ventana,PURPLE,[body[0],body[1],20,20]) #Dibujo el cuerpo de la snake 
-        self.check_error(ventana)
+        self.check_error()
     
 
     def check_valid_movement(self,proxima_tecla):
@@ -142,7 +142,7 @@ class Snake:
         self.draw_snake(ventana)
 
 
-    def check_error(self,ventana):
+    def check_error(self):
         """Cheque si la snake si choca consigo misma,si es asi la reseata"""
         if self.obtener_cabeza() in self.cuerpo[2:]:
             self.reset() #llamo a la funcion reset para volver a 1 a la snake
@@ -167,8 +167,9 @@ class Snake:
         raiz.withdraw()
         mbox.showerror("PERDISTE!","Tu score es : {0}".format(score))
         try:
-           
             raiz.destroy()#destruye un widget
+        
         except:
             pass
+        sys.exit()
         
