@@ -2,6 +2,7 @@ import pygame
 from variables import * 
 from colores import *
 
+
 class Datos:
     def __init__(self) -> None:
         """creo un constructor"""
@@ -18,7 +19,9 @@ class Datos:
         
     def devolder_nombre(self):
         """devuelvo lo que el usuario ingreso"""
-        return self.nombre_ingresado
+        nombre_ingresado = self.nombre_ingresado
+        return nombre_ingresado
     
+
 
         

@@ -1,6 +1,8 @@
 import pygame
 from colores import * 
 from variables import *
+    
+
 
 
 def imprimir_score(ventana,snake,bloque):
